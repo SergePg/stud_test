@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>stud_train</artifactId>
+        <groupId>ua.org.pius</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>stud_train_api</artifactId>
+<dependencies>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.4-1201-jdbc41</version>
+    </dependency>
+    <dependency>
+        <groupId>org.jooq</groupId>
+        <artifactId>jooq</artifactId>
+        <version>3.4.5</version>
+        <type>jar</type>
+        <scope>compile</scope>
+    </dependency>
+
+</dependencies>
+
+    <profiles>
+        <profile>
+            <id>db-gen</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jooq</groupId>
+                        <artifactId>jooq-codegen-maven</artifactId>
+                        <version>3.4.5</version>
+                        <executions>
+                            <execution>
+                                <id>exec3</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <jdbc>
+                                        <driver>org.postgresql.Driver</driver>
+                                        <url>jdbc:postgresql://localhost:5432/stud_train</url>
+                                        <user>postgres</user>
+                                        <password>postgres</password>
+                                    </jdbc>
+                                    <generator>
+                                        <name>org.jooq.util.DefaultGenerator</name>
+                                        <database>
+                                            <name>org.jooq.util.postgres.PostgresDatabase</name>
+                                            <includes>.*</includes>
+                                            <inputSchema>public</inputSchema>
+                                        </database>
+                                        <generate>
+                                            <instanceFields>true</instanceFields>
+                                            <pojos>false</pojos>
+                                            <daos>true</daos>
+                                        </generate>
+                                        <target>
+                                            <packageName>ua.org.pius.studtrain.db</packageName>
+                                            <directory>target/generated-sources/jooq-postgres</directory>
+                                        </target>
+                                    </generator>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>9.4-1201-jdbc41</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
