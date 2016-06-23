@@ -58,8 +58,8 @@
                                         </database>
                                         <generate>
                                             <instanceFields>true</instanceFields>
-                                            <pojos>false</pojos>
-                                            <daos>true</daos>
+                                            <pojos>true</pojos>
+                                            <daos>false</daos>
                                         </generate>
                                         <target>
                                             <packageName>ua.org.pius.studtrain.db</packageName>

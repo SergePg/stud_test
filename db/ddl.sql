@@ -105,7 +105,7 @@ CREATE TABLE student (
 -- -----------------------------------------------------
 -- Table `student_statistics`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS student_statistics (
+CREATE TABLE student_statistics (
   id                    INT NOT NULL,
   number_exam_for_group INT NULL DEFAULT NULL,
   number_exam_for_stud  INT NULL DEFAULT NULL,
@@ -156,7 +156,7 @@ CREATE TABLE question (
 -- -----------------------------------------------------
 -- Table `question_statistics`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS question_statistics (
+CREATE TABLE question_statistics (
   id                       INT NOT NULL,
   number_exam_for_theme    INT NULL DEFAULT NULL,
   number_exam_for_question INT NULL DEFAULT NULL,
@@ -197,7 +197,7 @@ CREATE TABLE logs
 -- -----------------------------------------------------
 -- Table `studies_course`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS studies_course (
+CREATE TABLE studies_course (
   id          INT           NOT NULL,
   name        VARCHAR(30)   NOT NULL,
   description VARCHAR(2048) NULL,
@@ -210,7 +210,7 @@ CREATE TABLE IF NOT EXISTS studies_course (
 -- -----------------------------------------------------
 -- Table `edu_group_course`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS edu_group_course (
+CREATE TABLE edu_group_course (
   id                INT NOT NULL,
   edu_group_id      INT NULL,
   studies_course_id INT NULL,
