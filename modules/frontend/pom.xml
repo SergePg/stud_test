@@ -84,21 +84,15 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>production-mode</id>
-            <properties>
-                <productionMode>true</productionMode>
-            </properties>
-            <activation>
-                <property>
-                    <name>productionMode</name>
-                    <value>true</value>
-                </property>
-            </activation>
+
             <build>
                 <plugins>
                     <plugin>
@@ -152,21 +146,7 @@
                         </executions>
                     </plugin>
 
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                    <goal>verify</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
             </build>
-        </profile>
-    </profiles>
 
 </project>

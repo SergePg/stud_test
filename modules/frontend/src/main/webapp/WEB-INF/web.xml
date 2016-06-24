@@ -24,22 +24,12 @@
         </param-value>
     </context-param>
 
-    <context-param>
-        <param-name>contextClass</param-name>
-        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
-    </context-param>
-
-
     <servlet>
         <servlet-name>Testing</servlet-name>
         <servlet-class>ru.xpoft.vaadin.SpringVaadinServlet</servlet-class>
         <init-param>
             <param-name>beanName</param-name>
             <param-value>testingUI</param-value>
-        </init-param>
-        <init-param>
-            <param-name>systemMessagesBeanName</param-name>
-            <param-value>DEFAULT</param-value>
         </init-param>
     </servlet>
 

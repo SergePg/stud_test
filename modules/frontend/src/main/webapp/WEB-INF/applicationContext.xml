@@ -15,6 +15,7 @@
         <property name="fallbackToSystemLocale" value="false" />
     </bean>
 
-    <bean class="ru.xpoft.vaadin.VaadinMessageSource" />
+    <bean id="securityContextPersistenceFilter"
+          class="org.springframework.security.web.context.SecurityContextPersistenceFilter"/>
 
 </beans>
