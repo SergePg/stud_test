@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface AAService {
     List<Privs> checkAuthentication(String username, String password) throws ServiceException;
-    void updateAuth(String username, String password) throws ServiceException;
-    void updateAuthPrivileged(String username, String password, String admin, String pswCache) throws ServiceException;
+    void updatePasswd(String username, String password) throws ServiceException;
+    void updatePasswdPrivileged(String username, String password, String admin, String pswCache) throws ServiceException;
 }

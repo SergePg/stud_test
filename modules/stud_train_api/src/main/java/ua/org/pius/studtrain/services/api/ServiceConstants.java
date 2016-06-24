@@ -15,6 +15,8 @@ public interface ServiceConstants {
 
     int UNKNOWN_ERROR = 999;
 
+    String DOMAIN_AUTH = "AUTH";
+
 
     String ENUM_USERS_ACTIVATION_DISABLED = "0";
     String ENUM_USERS_ACTIVATION_ENABLED = "1";

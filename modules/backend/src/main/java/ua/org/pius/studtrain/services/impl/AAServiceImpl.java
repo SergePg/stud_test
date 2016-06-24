@@ -8,6 +8,7 @@ import ua.org.pius.studtrain.db.Tables;
 import ua.org.pius.studtrain.db.tables.pojos.Privs;
 import ua.org.pius.studtrain.db.tables.records.ShadowRecord;
 import ua.org.pius.studtrain.db.tables.records.UsersRecord;
+import ua.org.pius.studtrain.services.api.AuditService;
 import ua.org.pius.studtrain.services.api.ServiceException;
 import ua.org.pius.studtrain.services.api.AAService;
 import ua.org.pius.studtrain.services.api.ServiceConstants;
@@ -19,7 +20,11 @@ import java.util.List;
  */
 public class AAServiceImpl implements AAService {
 
+    private final static String AUTH_CHECKED_SUCCESS = "Authentication checked successfully";
+
     private DSLContext context;
+
+    private AuditService auditService;
 
 
     @Override
@@ -38,6 +43,7 @@ public class AAServiceImpl implements AAService {
             if (shadowRecord == null)
                 throw new ServiceException(ServiceConstants.USER_NOT_FOUND);
             if ((StringUtils.isBlank(shadowRecord.getPassword()) && StringUtils.isBlank(password)) || shadowRecord.getPassword().equals(DigestUtils.md5Hex(password))) {
+                auditService.writeLog(username, ServiceConstants.DOMAIN_AUTH, AUTH_CHECKED_SUCCESS);
 //                all ok
                 return context.selectDistinct(Tables.PRIVS.fields())
                         .from(Tables.USER_ROLES)
@@ -58,12 +64,12 @@ public class AAServiceImpl implements AAService {
     }
 
     @Override
-    public void updateAuth(String username, String password) throws ServiceException {
+    public void updatePasswd(String username, String password) throws ServiceException {
 
     }
 
     @Override
-    public void updateAuthPrivileged(String username, String password, String admin, String pswCache) throws ServiceException {
+    public void updatePasswdPrivileged(String username, String password, String admin, String pswCache) throws ServiceException {
 
     }
 
