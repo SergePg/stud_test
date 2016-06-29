@@ -57,21 +57,10 @@ START 101;
 /*==============================================================*/
 create table answer (
   id                   INT                  not null,
-  text                 VARCHAR(1024)        null,
   question_id          INT                  not null,
+  result               INT1                 null,
+  text                 VARCHAR(1024)        null,
   constraint PK_ANSWER primary key (id)
-);
-
-/*==============================================================*/
-/* Table: edu_group                                             */
-/*==============================================================*/
-create table edu_group (
-  id                   INT                  not null,
-  name                 VARCHAR(25)          not null,
-  instructor           VARCHAR(30)          not null,
-  level                INT                  null,
-  group_list_id        INT                  null,
-  constraint PK_EDU_GROUP primary key (id)
 );
 
 /*==============================================================*/
@@ -83,32 +72,13 @@ create table exam (
   time_start           TIMESTAMP            not null,
   time_end             TIMESTAMP            not null,
   time_limit           TIMESTAMP            not null,
-  studies_course_id    INT                  null,
-  examenator           VARCHAR(30)          not null,
+  group_course_id      INT                  null,
   name                 VARCHAR(1024)        not null,
   description          VARCHAR(2048)        null,
-  parameter            INT                  null,
-  attempts             INT                  null,
-  param_type           INT                  null,
+  ball                 INT                  null,
   min_ball             INT                  null,
-  max_ball             INT                  null,
+  partition_id         INT5                 null,
   constraint PK_EXAM primary key (id)
-);
-
-/*==============================================================*/
-/* Table: exam_tree_node                                        */
-/*==============================================================*/
-create table exam_tree_node (
-  id                   INT                  not null,
-  exam_id              INT                  not null,
-  theme_id             INT                  not null,
-  num_question         INT                  null,
-  q_order              INT                  null,
-  permissibility       INT                  null,
-  distance             INT                  null,
-  min_ball             INT                  null,
-  max_ball             INT                  null,
-  constraint PK_EXAM_TREE_NODE primary key (id)
 );
 
 /*==============================================================*/
@@ -127,17 +97,17 @@ create table examination_ticket (
 create table group_course (
   id                   INT                  not null,
   studies_course_id    INT                  null,
-  group_list_id        INT                  not null,
+  groups_id            INT5                 null,
   constraint PK_GROUP_COURSE primary key (id)
 );
 
 /*==============================================================*/
-/* Table: group_list                                            */
+/* Table: groups                                                */
 /*==============================================================*/
-create table group_list (
-  id                   INT                  not null default NULL,
+create table groups (
+  id                   INT                  not null,
   name                 VARCHAR(25)          not null,
-  constraint PK_GROUP_LIST primary key (id)
+  constraint PK_EDU_GROUP primary key (id)
 );
 
 /*==============================================================*/
@@ -152,10 +122,36 @@ create table logs (
 );
 
 /*==============================================================*/
+/* Table: partition                                             */
+/*==============================================================*/
+create table partition (
+  id                   INT5                 not null,
+  name                 VARCHAR(255)         null,
+  studies_course_id    INT5                 null,
+  constraint PK_PARTITION primary key (id)
+);
+
+/*==============================================================*/
+/* Table: "partition-theme"                                     */
+/*==============================================================*/
+create table "partition-theme" (
+  id                   INT5                 not null,
+  partition_id         INT5                 null,
+  theme_id             INT5                 null,
+  num_questions        INT5                 null,
+  "order"              INT1                 null,
+  permissiability      INT2                 null,
+  distance             INT3                 null,
+  max_ball             INT3                 null,
+  min_ball             INT3                 null,
+  constraint "PK_PARTITION-THEME" primary key (id)
+);
+
+/*==============================================================*/
 /* Table: privs                                                 */
 /*==============================================================*/
 create table privs (
-  id                   VARCHAR(30)          not null,
+  id                   VARCHAR(11)          not null,
   name                 VARCHAR(30)          not null,
   description          VARCHAR(256)         null,
   constraint PK_PRIVS primary key (id)
@@ -166,11 +162,29 @@ create table privs (
 /*==============================================================*/
 create table question (
   id                   INT                  not null,
-  text                 TEXT                 not null,
-  ball                 INT                  not null,
-  question_type_id     INT                  not null,
+  number               INT3                 null,
   theme_id             INT                  not null,
+  question_type_id     INT                  not null,
+  ball                 INT                  not null,
+  text                 TEXT                 not null,
   constraint PK_QUESTION primary key (id)
+);
+
+/*==============================================================*/
+/* Table: question_statistics                                   */
+/*==============================================================*/
+create table question_statistics (
+  id                   INT                  not null,
+  number_exam_for_theme INT                  null default NULL,
+  number_exam_for_question INT                  null default NULL,
+  number_corrects      INT                  null default NULL,
+  number_incorrects    INT                  null default NULL,
+  number_rejections    INT                  null default NULL,
+  number_timeout       INT                  null default NULL,
+  summ_ball_possible   INT                  null default NULL,
+  summ_ball            INT                  null default NULL,
+  question_id          INT                  not null,
+  constraint PK_QUESTION_STATISTICS primary key (id)
 );
 
 /*==============================================================*/
@@ -187,7 +201,7 @@ create table question_type (
 /*==============================================================*/
 create table role_privs (
   rolename             VARCHAR(30)          not null,
-  privilege_id         VARCHAR(30)          not null,
+  privilege_id         VARCHAR(11)          not null,
   constraint PK_ROLE_PRIVS primary key (rolename, privilege_id)
 );
 
@@ -215,10 +229,8 @@ create table shadow (
 /*==============================================================*/
 create table student (
   id                   INT                  not null,
-  name                 VARCHAR(25)          not null,
-  full_name            VARCHAR(100)         not null,
   username             VARCHAR(30)          null,
-  group_list_id        INT                  not null,
+  groups_id            INT                  not null,
   constraint PK_STUDENT primary key (id)
 );
 
@@ -227,14 +239,32 @@ create table student (
 /*==============================================================*/
 create table student_result (
   id                   INT                  not null,
+  attempt              INT                  null,
   text                 VARCHAR(1024)        null,
   ball                 INT                  null,
   success_question     INT                  null,
   all_questions        INT                  null,
   time_start           TIMESTAMP            null,
   time_end             TIMESTAMP            null,
-  task_id              INT                  null,
+  student_task_id      INT                  null,
   constraint PK_STUDENT_RESULT primary key (id)
+);
+
+/*==============================================================*/
+/* Table: student_statistics                                    */
+/*==============================================================*/
+create table student_statistics (
+  id                   INT                  not null,
+  number_exam_for_group INT                  null default NULL,
+  number_exam_for_stud INT                  null default NULL,
+  number_corrects      INT                  null default NULL,
+  number_incorrects    INT                  null default NULL,
+  number_rejections    INT                  null default NULL,
+  number_timeout       INT                  null default NULL,
+  summ_ball_possible   INT                  null default NULL,
+  summ_ball            INT                  null default NULL,
+  student_id           INT                  not null,
+  constraint PK_STUDENT_STATISTICS primary key (id)
 );
 
 /*==============================================================*/
@@ -252,11 +282,13 @@ create table student_task (
 /*==============================================================*/
 create table studies_course (
   id                   INT                  not null,
+  username             VARCHAR(30)          null,
   name                 VARCHAR(30)          not null,
   description          VARCHAR(2048)        null,
   date_start           TIMESTAMP            null,
   date_end             TIMESTAMP            null,
   state                INT                  null,
+  instructor           VARCHAR(30)          null,
   constraint PK_STUDIES_COURSE primary key (id)
 );
 
@@ -265,20 +297,11 @@ create table studies_course (
 /*==============================================================*/
 create table task_answer (
   id                   INT                  not null,
-  task_questions_id    INT                  not null,
+  ticket_questions_id  INT                  not null,
   answer_id            INT                  not null,
   text                 VARCHAR(1024)        null,
+  student_task_id      INT                  null,
   constraint PK_TASK_ANSWER primary key (id)
-);
-
-/*==============================================================*/
-/* Table: task_questions                                        */
-/*==============================================================*/
-create table task_questions (
-  id                   INT                  not null,
-  student_task_id      INT                  not null,
-  question_id          INT                  not null,
-  constraint PK_TASK_QUESTIONS primary key (id)
 );
 
 /*==============================================================*/
@@ -292,6 +315,17 @@ create table theme (
   rgt                  INT                  not null,
   lft                  INT                  not null,
   constraint PK_THEME primary key (id)
+);
+
+/*==============================================================*/
+/* Table: ticket_questions                                      */
+/*==============================================================*/
+create table ticket_questions (
+  id                   INT                  not null,
+  number               INT3                 null,
+  question_id          INT                  not null,
+  examination_ticket_id INT5                 null,
+  constraint PK_TASK_QUESTIONS primary key (id)
 );
 
 /*==============================================================*/
@@ -325,34 +359,14 @@ alter table answer
 references question (id)
 on delete restrict on update restrict;
 
-alter table edu_group
-  add constraint fk_edu_group_group_list foreign key (group_list_id)
-references group_list (id)
-on delete restrict on update restrict;
-
-alter table edu_group
-  add constraint fk_edu_group_users foreign key (instructor)
-references users (username)
-on delete cascade on update cascade;
-
 alter table exam
-  add constraint fk_exam_studies_course foreign key (studies_course_id)
-references studies_course (id)
+  add constraint FK_EXAM_EXAM_GROU_GROUP_CO foreign key (group_course_id)
+references group_course (id)
 on delete restrict on update restrict;
 
 alter table exam
-  add constraint fk_exam_users foreign key (examenator)
-references users (username)
-on delete restrict on update restrict;
-
-alter table exam_tree_node
-  add constraint fk_exam_tree_node_exam foreign key (exam_id)
-references exam (id)
-on delete restrict on update restrict;
-
-alter table exam_tree_node
-  add constraint fk_exam_tree_node_theme foreign key (theme_id)
-references theme (id)
+  add constraint FK_EXAM_FK_EXAM_M_PARTITIO foreign key (partition_id)
+references partition (id)
 on delete restrict on update restrict;
 
 alter table examination_ticket
@@ -361,8 +375,8 @@ references exam (id)
 on delete restrict on update restrict;
 
 alter table group_course
-  add constraint fk_group_course_group_list foreign key (group_list_id)
-references group_list (id)
+  add constraint FK_GROUP_CO_FK_GROUP__GROUPS foreign key (groups_id)
+references groups (id)
 on delete restrict on update restrict;
 
 alter table group_course
@@ -375,6 +389,21 @@ alter table logs
 references users (username)
 on delete restrict on update restrict;
 
+alter table partition
+  add constraint FK_PARTITIO_FK_MODUL__STUDIES_ foreign key (studies_course_id)
+references studies_course (id)
+on delete restrict on update restrict;
+
+alter table "partition-theme"
+  add constraint "FK_PARTITIO_FK_MODUL-_THEME" foreign key (theme_id)
+references theme (id)
+on delete restrict on update restrict;
+
+alter table "partition-theme"
+  add constraint FK_PARTITIO_FK_MODUL__PARTITIO foreign key (partition_id)
+references partition (id)
+on delete restrict on update restrict;
+
 alter table question
   add constraint fk_question_question_type foreign key (question_type_id)
 references question_type (id)
@@ -383,6 +412,11 @@ on delete cascade on update cascade;
 alter table question
   add constraint fk_question_theme foreign key (theme_id)
 references theme (id)
+on delete cascade on update cascade;
+
+alter table question_statistics
+  add constraint fk_question_id foreign key (question_id)
+references question (id)
 on delete cascade on update cascade;
 
 alter table role_privs
@@ -401,8 +435,8 @@ references users (username)
 on delete cascade on update cascade;
 
 alter table student
-  add constraint fk_student_edu_group foreign key (group_list_id)
-references edu_group (id)
+  add constraint fk_student_edu_group foreign key (groups_id)
+references groups (id)
 on delete cascade on update cascade;
 
 alter table student
@@ -411,9 +445,14 @@ references users (username)
 on delete cascade on update cascade;
 
 alter table student_result
-  add constraint fk_student_res_student_task foreign key (task_id)
+  add constraint fk_student_res_student_task foreign key (student_task_id)
 references student_task (id)
 on delete restrict on update restrict;
+
+alter table student_statistics
+  add constraint fk_student_id foreign key (student_id)
+references student (id)
+on delete cascade on update cascade;
 
 alter table student_task
   add constraint fk_student_task_exam_ticket foreign key (examination_ticket_id)
@@ -425,24 +464,24 @@ alter table student_task
 references student (id)
 on delete restrict on update restrict;
 
+alter table studies_course
+  add constraint FK_STUDIES__FK_STUDIE_USERS foreign key (username)
+references users (username)
+on delete restrict on update restrict;
+
+alter table task_answer
+  add constraint FK_TASK_ANS_REFERENCE_STUDENT_ foreign key (student_task_id)
+references student_task (id)
+on delete restrict on update restrict;
+
 alter table task_answer
   add constraint fk_task_answer_answer foreign key (answer_id)
 references answer (id)
 on delete cascade on update cascade;
 
 alter table task_answer
-  add constraint fk_task_answer_task_questions foreign key (task_questions_id)
-references task_questions (id)
-on delete cascade on update cascade;
-
-alter table task_questions
-  add constraint fk_task_quest_question foreign key (question_id)
-references question (id)
-on delete cascade on update cascade;
-
-alter table task_questions
-  add constraint fk_task_quest_student_task foreign key (student_task_id)
-references student_task (id)
+  add constraint fk_task_answer_task_questions foreign key (ticket_questions_id)
+references ticket_questions (id)
 on delete cascade on update cascade;
 
 alter table theme
@@ -453,6 +492,16 @@ on delete cascade on update cascade;
 alter table theme
   add constraint fk_theme_user foreign key (creator_name)
 references users (username)
+on delete cascade on update cascade;
+
+alter table ticket_questions
+  add constraint fk_task_quest_question foreign key (question_id)
+references question (id)
+on delete cascade on update cascade;
+
+alter table ticket_questions
+  add constraint fk_task_quest_student_task foreign key (examination_ticket_id)
+references examination_ticket (id)
 on delete cascade on update cascade;
 
 alter table user_roles
